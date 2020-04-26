@@ -1,9 +1,23 @@
-/* Deadline's 2D SDL Template */
+/***************************************************************
+ **   DLSTORM   Deadline's Code Storm
+ **          /\
+ **   ---- D/L \----
+ **       \/
+ **   License:      BSD
+ **   Copyright:    2020
+ **   File:         new_pacman.cpp
+ **   Description:  New Pacman Game
+ **   Author:       Seth Parson aka Deadline
+ **   Twitter:      @Sethcoder
+ **   Website:      www.sethcoder.com
+ **   Email:        defectiveseth@gmail.com
+ **
+ ***************************************************************/
 #define _DLCS_SDL 1
+#define _DLCS_APP_NAME "Deadline's New Pacman Game"
 #include "new_pacman.h"
-#define APP_NAME "Deadline's New Pacman Game"
-
-
+CGame *Game;
+/*
 #define EXTRALIFEBONUS 10000
 
 #define PACMAN_NONE     0
@@ -66,24 +80,59 @@ long deathmodestarttime;
 #define levelup 5
 
 unsigned int pacmatrix[41][33];
-
-//CEntity *ena;
-//CEntity *enb;
+*/
 
 void CGame::UserInit() {
-    zl("UserInit()");
-    SDL->SpriteAdd("hank","gfx/pacman.bmp");
-    //ena = new CEntity((char *)"Fred");
-    //enb = new CEntity((char *)"Evil Pig");
+    bShowConsole=true;
+    ConsoleLog(_DLCS_APP_NAME);
+    ConsoleLog(va("%s",dlcs_get_os_version()));
+    ConsoleLog("Press F12 to toggle the console.");
+
+    ActorAdd("Pacman");
+    ConsoleLog("Pacman added");
+    ActorAdd("Blinky");
+    ActorAdd("Pinky");
+    ActorAdd("Inky");
+    ActorAdd("Clyde");
+
+    Actor("Pacman")->LoadGAFSurface("gfx/pacman1.bmp");
+    Actor("Pacman")->AnimationAdd("right");
+    Actor("Pacman")->Animation("right")->FrameAdd(0,0,32,32);
+    Actor("Pacman")->Animation("right")->FrameAdd(32,0,32,32);
+    Actor("Pacman")->Animation("right")->animation_speed=200;
+    Actor("Pacman")->AnimationSet("right");
+
+    Actor("Blinky")->LoadGAFSurface("gfx/blinky.bmp");
+    Actor("Blinky")->AnimationAdd("right");
+    Actor("Blinky")->Animation("right")->FrameAdd(0,0,32,32);
+    Actor("Blinky")->Animation("right")->FrameAdd(32,0,32,32);
+    Actor("Blinky")->Animation("right")->animation_speed=200;
+    Actor("Blinky")->AnimationSet("right");
+
+    Actor("Pinky")->LoadGAFSurface("gfx/pinky.bmp");
+    Actor("Inky")->LoadGAFSurface("gfx/inky.bmp");
+    Actor("Clyde")->LoadGAFSurface("gfx/clyde.bmp");
+
+    ActorMoveTo("Pacman",100,600);
+    ActorMoveTo("Blinky",200,600);
+    ActorMoveTo("Pinky",300,600);
+    ActorMoveTo("Inky",400,600);
+    ActorMoveTo("Clyde",500,600);
+
     //ena->push_event(enb,G_ENTITY_ATTACK,va("%d",rand()%209+34),ena);
     //enb->push_event(ena,G_ENTITY_ATTACK,va("%d",rand()%209+34),enb);
 }
 
 void CGame::UserGFX() {
-//  SDL->DrawMap();
-    SDL->Write(10,10,(char *)" Deadline's New Pacman Game ",0);
-    SDL->Write(10,24,(char *)" ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789!@#$%^&*()[]{}\\/<>?,. Hi testing...",0);
-    SDL->Write(10,38,(char *)" ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789!@#$%^&*()[]{}\\/<>?,. Hi testing...",1);
+    ActorMoveTo("Pacman",100,600);
+    ActorDraw("Pacman");
+    ActorMoveTo("Pacman",100,700);
+    ActorDraw("Pacman");
+    ActorDraw("Blinky");
+    ActorDraw("Pinky");
+    ActorDraw("Inky");
+    ActorDraw("Clyde");
+    //  SDL->DrawMap();
 }
 
 void CGame::UserKeys() {
@@ -111,19 +160,35 @@ void CGame::UserKeys() {
             break;
 
         case SDLK_LEFT:
+            break;
         case SDLK_RIGHT:
+            break;
         case SDLK_F1:
+            break;
         case SDLK_F2:
+            break;
         case SDLK_F3:
+            break;
         case SDLK_F4:
+            break;
         case SDLK_F5:
+            break;
         case SDLK_F6:
+            break;
         case SDLK_F7:
+            break;
         case SDLK_F8:
+            break;
         case SDLK_F9:
+            break;
         case SDLK_F10:
+            break;
         case SDLK_F11:
+            break;
         case SDLK_F12:
+            ConsoleLog("Console Toggled");
+            bShowConsole ? bShowConsole=false : bShowConsole=true;
+            break;
         case SDLK_KP_PLUS:
         case SDLK_KP_MINUS:
         default:
@@ -132,10 +197,8 @@ void CGame::UserKeys() {
 }
 
 int main(int argc, char *argv[]) {
-    CGame *Game=new CGame((char *)APP_NAME,SGC_ALL);
+    Game=new CGame(_DLCS_APP_NAME,SGC_ALL);
     while(!Game->Loop());
-    //dlcsm_delete(ena);
-    //dlcsm_delete(enb);
-    dlcsm_delete(Game);
+    DEL(Game);
     return(0);
 }
